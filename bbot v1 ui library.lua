@@ -1,12 +1,13 @@
 -- bbot v1 source ui library
-local CanPenatrate
+local CanPenetrate
+
 
 local Vector3new = Vector3.new()
 local Vector2new = Vector2.new()
 local sphereHitbox = Instance.new("Part", workspace)
 local diameter
 do
-    diameter = 11
+	diameter = 11 -- up to 12 works
 	sphereHitbox.Size = Vector3.new(diameter, diameter, diameter)
 	sphereHitbox.Position = Vector3new
 	sphereHitbox.Shape = Enum.PartType.Ball
@@ -15,10 +16,10 @@ do
 	sphereHitbox.CanCollide = false
 end
 
-local function CreateThread(func)
-    local thread = coroutine.create(func)
-    coroutine.resume(thread)
-    return thread
+local function CreateThread(func) 
+   local thread = coroutine.create(func)
+   coroutine.resume(thread)
+   return thread
 end
 
 local Input = game:GetService("UserInputService")
@@ -26,6 +27,7 @@ local Players = game:GetService("Players")
 local MainPlayer = game.Players.LocalPlayer
 
 setfpscap(1000)
+
 
 local waiting = Drawing.new("Text")
 waiting.Visible = true
@@ -39,15 +41,16 @@ waiting.OutlineColor = Color3.fromRGB(90, 20, 130)
 waiting.Font = 3
 waiting.Position = Vector2.new(200,100)
 
-wait(12-time())
+wait(12-time())				
 wait(3)
 waiting:Remove()
 
-if not isfile("bbconfigs") then --folders for the configs
-    makefolder("bbconfigs")
+
+if not isfolder("bbconfigs") then 
+	makefolder("bbconfigs")
 end
 
-for i = 1, 6 do -- you can put any number it does the job
+for i = 1, 6 do 
 	if not isfile("bbconfigs/config"..tostring(i)..".bb") then 
 		writefile("bbconfigs/config"..tostring(i)..".bb", "")
 	end
@@ -69,7 +72,19 @@ local gameround
 
 local gameNetwork = game:GetService("NetworkClient")
 local gameSettings = UserSettings():GetService("UserGameSettings")
--- shit driving me nuts, fuck you nathan 😡😡
+
+-- fuck you nathan
+local OLD_GUNS = game:GetService("ReplicatedStorage").GunModules:Clone()
+OLD_GUNS.Name = tostring(math.random(1e5, 9e5))
+OLD_GUNS.Parent = game:GetService("ReplicatedStorage")
+
+local CUR_GUNS = game:GetService("ReplicatedStorage").GunModules
+-- table.foreach(oldGuns,print)
+
+
+
+
+
 
 for k, v in pairs(getgc(true)) do
 	if type(v) == "function" then
@@ -253,7 +268,51 @@ local function draw_filled_tri(visible, pa_x, pa_y, pb_x, pb_y, pc_x, pc_y, r, g
 	tablename[varname].Filled = true
 end
 
-local vec3Gravity = Vector3.new(0, -196.2, 0)
+local vec3Gravity = Vector3.new(0, -196.2, 0) 
+
+
+--da esp so it renders bellow the menu
+local enemy_skel_head = {}
+local enemy_skel_right_arm = {}
+local enemy_skel_left_arm = {}
+local enemy_skel_right_leg = {}
+local enemy_skel_left_leg = {}
+local enemy_skeleton = {enemy_skel_head, enemy_skel_torso, enemy_skel_right_arm, enemy_skel_left_arm, enemy_skel_right_leg, enemy_skel_left_leg}
+
+local enemybox = {}
+local enemy_outer_outline = {}
+local enemy_inner_outline = {}
+local enemy_outlines = {enemy_outer_outline, enemy_inner_outline}
+local enemy_name_text = {}
+local enemy_wep_text = {}
+local enemy_dist_text = {}
+
+
+local enemy_health_text = {}
+local enemy_health_outer = {}
+local enemy_health_back = {}
+local enemy_health_inner = {}
+local enemy_health = {enemy_health_outer, enemy_health_back, enemy_health_inner, enemy_health_text}
+
+---------------------- DROPED ESP OR WHATEVA
+local dropped_wep = {}
+local dropped_wep_ammo = {}
+
+local outline_boxes = {enemy_outer_outline, enemy_inner_outline}
+local alltext = {enemy_name_text, enemy_wep_text, enemy_dist_text}
+local allboxes = {enemybox, enemy_outer_outline, enemy_inner_outline}
+local allvisualshit = 
+{
+	enemybox, enemy_outer_outline, enemy_inner_outline, enemy_name_text, enemy_wep_text, enemy_dist_text,
+	enemy_health_outer, enemy_health_back, enemy_health_inner, enemy_health_text,
+	enemy_skel_head, enemy_skel_torso, enemy_skel_right_arm, enemy_skel_left_arm, enemy_skel_right_leg, enemy_skel_left_leg,
+	
+	dropped_wep, dropped_wep_ammo
+}
+
+-- nate please fix how this looks its like 4 am please
+-- what all this shit above here? EWWW
+-- i didnt ask you to make fun of me i asked u to clean it up!!!!!!!!!!!!!!
 
 drawcount = 0
 for i = 1, 60 do 
