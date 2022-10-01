@@ -74,7 +74,6 @@ local gameNetwork = game:GetService("NetworkClient")
 local gameSettings = UserSettings():GetService("UserGameSettings")
 
 -- fuck you nathan
-local OLD_GUNS = game:GetService("ReplicatedStorage").GunModules:Clone()
 OLD_GUNS.Name = tostring(math.random(1e5, 9e5))
 OLD_GUNS.Parent = game:GetService("ReplicatedStorage")
 
